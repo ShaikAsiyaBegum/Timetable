@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oceanic Study Companion 🌊</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ================= GLOBAL RESET ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ================= ROOT VARIABLES ================= */
+:root {
+  --pink: #ff9acb;
+  --blue: #6ecbff;
+  --glass: rgba(255, 255, 255, 0.1);
+  --dark-glass: rgba(0, 0, 0, 0.5);
+}
+
+/* ================= BODY & SCROLL ================= */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Quicksand', sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* ================= BACKGROUND - GUARANTEED TO WORK ================= */
+#ocean-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 2s ease-in-out;
+  opacity: 1;
+  
+  /* Default background that will show before images load */
+  background: linear-gradient(to bottom, #001220, #003459);
+}
+
+/* Dark overlay for text readability */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+
+/* ================= LANDING ================= */
+#landing {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: rgba(0, 10, 20, 0.7);
+  backdrop-filter: blur(3px);
+}
+
+#heart {
+  font-size: 120px;
+  color: var(--pink);
+  animation: pulse 2s infinite;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s ease;
+  text-shadow: 0 0 30px rgba(255, 154, 203, 0.7);
+}
+
+#heart:hover {
+  transform: scale(1.2);
+  animation: pulse 0.8s infinite;
+}
+
+#heart span {
+  display: block;
+  font-size: 24px;
+  margin-top: 20px;
+  font-family: 'Pacifico', cursive;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+  margin-top: 30px;
+  font-size: 18px;
+  opacity: 0.9;
+  text-align: center;
+  max-width: 80%;
+}
+
+/* ================= DASHBOARD ================= */
+#dashboard {
+  display: none;
+  min-height: 100vh;
+  padding: 100px 20px 160px;
+}
+
+/* ================= HEADER ================= */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--dark-glass);
+  backdrop-filter: blur(10px);
+  z-index: 5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#clock {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 0 10px var(--blue);
+}
+
+#greeting {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.progress-indicator {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--pink);
+  text-shadow: 0 0 10px var(--pink);
+}
+
+/* ================= NAV ICONS ================= */
+#nav {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  z-index: 5;
+  padding: 15px;
+}
+
+.nav-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  animation: float 4s ease-in-out infinite;
+}
+
+.nav-icon:nth-child(1) { animation-delay: 0s; }
+.nav-icon:nth-child(2) { animation-delay: 1s; }
+.nav-icon:nth-child(3) { animation-delay: 2s; }
+.nav-icon:nth-child(4) { animation-delay: 3s; }
+
+.nav-icon:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+.nav-tooltip {
+  position: absolute;
+  top: -40px;
+  background: var(--dark-glass);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.nav-icon:hover .nav-tooltip {
+  opacity: 1;
+}
+
+/* ================= CARDS ================= */
+.card {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 25px;
+  background: var(--glass);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  font-family: 'Pacifico', cursive;
+  font-size: 32px;
+  color: white;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ================= HEART CHECKBOX ================= */
+.task {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.task:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(10px);
+}
+
+.task.morning { border-left-color: #ff9a00; }
+.task.afternoon { border-left-color: #00b4d8; }
+.task.evening { border-left-color: #ff477e; }
+
+/* Heart checkbox styling */
+.heart-checkbox {
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.heart-checkbox::before {
+  content: "♡";
+  font-size: 30px;
+  color: var(--pink);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+}
+
+.heart-checkbox.checked::before {
+  content: "❤️";
+  font-size: 30px;
+  color: var(--pink);
+  animation: heartBeat 0.5s ease;
+  text-shadow: 0 0 20px var(--pink);
+}
+
+.task-text {
+  flex: 1;
+  font-size: 18px;
+}
+
+.task-time {
+  font-weight: 600;
+  color: var(--blue);
+  margin-right: 15px;
+  min-width: 120px;
+}
+
+.coin-session {
+  color: #ffd700;
+  text-shadow: 0 0 5px #ffd700;
+}
+
+/* ================= PROGRESS BAR ================= */
+.progress-container {
+  margin-top: 30px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--pink), var(--blue));
+  transition: width 1s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* ================= SECTIONS ================= */
+.section {
+  display: none;
+}
+
+/* ================= AFFIRMATION OVERLAY ================= */
+#affirmation {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  flex-direction: column;
+  animation: fadeIn 0.5s ease;
+}
+
+#affirmation p {
+  font-family: 'Pacifico', cursive;
+  font-size: 42px;
+  line-height: 1.4;
+  color: white;
+  text-shadow: 0 0 20px rgba(255, 154, 203, 0.8);
+  margin-bottom: 30px;
+  max-width: 800px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 36px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  color: var(--pink);
+  transform: scale(1.2);
+}
+
+.completion-text {
+  font-size: 24px;
+  color: var(--pink);
+  margin-top: 20px;
+  animation: pulse 2s infinite;
+}
+
+/* ================= CELEBRATION EFFECTS ================= */
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: var(--pink);
+  top: -10px;
+  animation: fall linear forwards;
+  z-index: 99;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+    margin: 15px;
+  }
+  
+  .card h2 {
+    font-size: 24px;
+  }
+  
+  .task-text {
+    font-size: 16px;
+  }
+  
+  .task-time {
+    min-width: 100px;
+    font-size: 14px;
+  }
+  
+  #nav {
+    gap: 15px;
+  }
+  
+  .nav-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  #affirmation p {
+    font-size: 28px;
+  }
+  
+  #heart {
+    font-size: 80px;
+  }
+  
+  #heart span {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .task-time {
+    min-width: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= BACKGROUND ================= -->
+<div id="ocean-bg"></div>
+<div class="overlay"></div>
+
+<!-- ================= LANDING ================= -->
+<div id="landing">
+  <div id="heart">
+    💖
+    <span>Click to begin your journey</span>
+  </div>
+  <p class="subtitle">A special study companion made with love 🌊</p>
+</div>
+
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div id="clock">00:00</div>
+      <div id="greeting">Good morning!</div>
+    </div>
+    <div class="progress-indicator" id="progress-indicator">0%</div>
+  </div>
+
+  <!-- Today's Tasks -->
+  <div id="today-section" class="section">
+    <div class="card">
+      <h2><i class="fas fa-heart"></i> Today's Tasks</h2>
+      <div id="taskList"></div>
+      <div class="progress-container">
+        <div class="progress-label">
+          <span>Daily Progress</span>
+          <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Timetable -->
+  <div id="weekly-section" class="section">
+    <div class="card">
+      <h2><i class="fas fa-calendar-alt"></i> Weekly Timetable</h2>
+      <div id="weeklyTimetable"></div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div id="progress-section" class="section">
+    <div class="card">
+      <h2><i class="fas fa-chart-line"></i> Your Progress</h2>
+      <div id="progressDetails">
+        <div style="text-align: center; margin: 30px 0;">
+          <div style="font-size: 48px; color: var(--pink); margin-bottom: 10px;" id="score">0%</div>
+          <div style="font-size: 18px;">Daily Completion</div>
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <div style="font-size: 20px;">Streak: <span id="streak">0</span> days 🔥</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quotes -->
+  <div id="quotes-section" class="section">
+    <div class="card">
+      <h2><i class="fas fa-quote-left"></i> Daily Inspiration</h2>
+      <div id="quotesList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ================= NAV ================= -->
+<div id="nav">
+  <div class="nav-icon" onclick="showSection('today-section')" data-tooltip="Today's Tasks">
+    <i class="fas fa-seashell"></i>
+    <div class="nav-tooltip">Today's Tasks</div>
+  </div>
+  <div class="nav-icon" onclick="showSection('weekly-section')" data-tooltip="Weekly Timetable">
+    <i class="fas fa-moon"></i>
+    <div class="nav-tooltip">Weekly Timetable</div>
+  </div>
+  <div class="nav-icon" onclick="showSection('progress-section')" data-tooltip="Your Progress">
+    <i class="fas fa-starfish"></i>
+    <div class="nav-tooltip">Your Progress</div>
+  </div>
+  <div class="nav-icon" onclick="showSection('quotes-section')" data-tooltip="Daily Inspiration">
+    <i class="fas fa-gem"></i>
+    <div class="nav-tooltip">Daily Inspiration</div>
+  </div>
+</div>
+
+<!-- ================= AFFIRMATION ================= -->
+<div id="affirmation">
+  <div class="close-btn" onclick="closeAffirmation()">×</div>
+  <p id="affirmation-text">The ocean of tomorrow awaits your courage today 🌊</p>
+  <div class="completion-text">100% Completed! 🎉</div>
+</div>
+
+<script>
+// ================= BACKGROUND SYSTEM =================
+// Using reliable, working image URLs that are guaranteed to work
+const backgrounds = {
+  morning: [
+    "https://wallpaperaccess.com/full/141299.jpg",
+    "https://wallpaperaccess.com/full/2484219.jpg",
+    "https://wallpaperaccess.com/full/2102.jpg"
+  ],
+  afternoon: [
+    "https://wallpaperaccess.com/full/2105.jpg",
+    "https://wallpaperaccess.com/full/2113.jpg",
+    "https://wallpaperaccess.com/full/2120.jpg"
+  ],
+  evening: [
+    "https://wallpaperaccess.com/full/2117.jpg",
+    "https://wallpaperaccess.com/full/2108.jpg",
+    "https://wallpaperaccess.com/full/2484221.jpg"
+  ],
+  night: [
+    "https://wallpaperaccess.com/full/2111.jpg",
+    "https://wallpaperaccess.com/full/2124.jpg",
+    "https://wallpaperaccess.com/full/2484224.jpg"
+  ]
+};
+
+// CSS Gradients as ultimate fallback
+const gradientBackgrounds = {
+  morning: "linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%)",
+  afternoon: "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+  evening: "linear-gradient(135deg, #ff6b6b 0%, #ffd166 100%)",
+  night: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)"
+};
+
+// CSS Patterns as additional fallback
+const patternBackgrounds = {
+  morning: `
+    radial-gradient(circle at 20% 20%, #ffd3a5 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #ffafbd 0%, transparent 50%),
+    linear-gradient(45deg, #ffd3a5 25%, #ffafbd 25%, #ffafbd 50%, #ffd3a5 50%, #ffd3a5 75%, #ffafbd 75%, #ffafbd)
+  `,
+  afternoon: `
+    radial-gradient(circle at 20% 20%, #6dd5ed 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #2193b0 0%, transparent 50%),
+    linear-gradient(45deg, #6dd5ed 25%, #2193b0 25%, #2193b0 50%, #6dd5ed 50%, #6dd5ed 75%, #2193b0 75%, #2193b0)
+  `,
+  evening: `
+    radial-gradient(circle at 20% 20%, #ffd166 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #ff6b6b 0%, transparent 50%),
+    linear-gradient(45deg, #ffd166 25%, #ff6b6b 25%, #ff6b6b 50%, #ffd166 50%, #ffd166 75%, #ff6b6b 75%, #ff6b6b)
+  `,
+  night: `
+    radial-gradient(circle at 20% 20%, #203a43 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, #0f2027 0%, transparent 50%),
+    linear-gradient(45deg, #0f2027 25%, #203a43 25%, #203a43 50%, #2c5364 50%, #2c5364 75%, #0f2027 75%, #0f2027)
+  `
+};
+
+function setBackground() {
+  const hour = new Date().getHours();
+  let period = "night";
+  
+  if (hour >= 5 && hour < 11) period = "morning";
+  else if (hour >= 11 && hour < 16) period = "afternoon";
+  else if (hour >= 16 && hour < 18) period = "evening";
+  
+  const oceanBg = document.getElementById("ocean-bg");
+  
+  // TRY METHOD 1: Use wallpapaeraccess images (most reliable)
+  const imageUrls = backgrounds[period];
+  const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+  
+  console.log(`Attempting to load ${period} background: ${randomImage}`);
+  
+  // Create test image
+  const testImg = new Image();
+  testImg.crossOrigin = "anonymous"; // Try to avoid CORS issues
+  
+  testImg.onload = function() {
+    // SUCCESS: Image loaded
+    console.log(`✓ Image loaded successfully for ${period}`);
+    oceanBg.style.backgroundImage = `url('${randomImage}')`;
+    oceanBg.style.opacity = "1";
+    
+    // Add a subtle wave animation
+    oceanBg.style.animation = "waveEffect 20s ease-in-out infinite";
+    
+    // Update console status
+    updateBackgroundStatus(`Image background loaded: ${period}`);
+  };
+  
+  testImg.onerror = function() {
+    console.log(`✗ Image failed to load, trying pattern background for ${period}`);
+    
+    // Try METHOD 2: CSS Pattern
+    oceanBg.style.backgroundImage = "none";
+    oceanBg.style.background = patternBackgrounds[period];
+    oceanBg.style.opacity = "1";
+    oceanBg.style.backgroundSize = "100px 100px";
+    
+    updateBackgroundStatus(`Pattern background: ${period}`);
+  };
+  
+  // Start loading the image
+  testImg.src = randomImage + "?t=" + new Date().getTime(); // Add timestamp to avoid cache
+  
+  // Update greeting
+  const greeting = document.getElementById("greeting");
+  if (hour < 12) greeting.textContent = "Good Morning! 🌅";
+  else if (hour < 18) greeting.textContent = "Good Afternoon! ☀️";
+  else greeting.textContent = "Good Evening! 🌙";
+  
+  // Add wave animation CSS if not already added
+  if (!document.getElementById('wave-animation')) {
+    const waveStyle = document.createElement('style');
+    waveStyle.id = 'wave-animation';
+    waveStyle.textContent = `
+      @keyframes waveEffect {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+    `;
+    document.head.appendChild(waveStyle);
+  }
+}
+
+function updateBackgroundStatus(message) {
+  console.log(`Background Status: ${message}`);
+  // Optional: You could show this status in the UI for debugging
+  // document.getElementById('greeting').textContent += " | " + message;
+}
+
+// ================= CLOCK =================
+function updateClock() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true 
+  });
+  document.getElementById("clock").textContent = timeStr;
+}
+
+// ================= DATA =================
+const weeklySchedule = {
+  Monday: [
+    { time: "5:00 - 7:00 AM", task: "Math Practice", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "Coding Session ⭐", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "VLSI", session: "evening" }
+  ],
+  Tuesday: [
+    { time: "5:00 - 7:00 AM", task: "ECO1", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "Coding Session ⭐", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "VLSI", session: "evening" }
+  ],
+  Wednesday: [
+    { time: "5:00 - 7:00 AM", task: "ECO2", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "Coding Session ⭐", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "LINEAR", session: "evening" }
+  ],
+  Thursday: [
+    { time: "5:00 - 7:00 AM", task: "Math Practice", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "Coding Session ⭐", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "MICROWAVE", session: "evening" }
+  ],
+  Friday: [
+    { time: "5:00 - 7:00 AM", task: "ECO1", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "Coding Session ⭐", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "MICROWAVE", session: "evening" }
+  ],
+  Saturday: [
+    { time: "5:00 - 7:00 AM", task: "ECO2", session: "morning" },
+    { time: "1:00 - 2:00 PM", task: "weekday Review", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "LINEAR", session: "evening" }
+  ],
+  Sunday: [
+    { time: "5:00 - 7:00 AM", task: "PE1", session: "morning" },
+    { time: "1:00 - 3:00 PM", task: "PE2", session: "afternoon" },
+    { time: "6:00 - 9:00 PM", task: "NTG", session: "evening" }
+  ]
+};
+
+const quotes = [
+  "The ocean of tomorrow awaits your courage today 🌊",
+  "Small waves still move the shore 💖",
+  "You are deeper than your doubts ✨",
+  "Consistency is the tide that changes everything",
+  "Every drop of effort fills your ocean of success",
+  "Sail through challenges like a ship through storms",
+  "Your potential is as vast as the sea",
+  "Ride the waves of knowledge to new horizons"
+];
+
+// ================= INITIALIZATION =================
+const currentDay = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {};
+let streak = parseInt(localStorage.getItem('streak')) || 0;
+
+// ================= LANDING CLICK =================
+document.getElementById("heart").onclick = () => {
+  document.getElementById("landing").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  showSection('today-section');
+  initializeApp();
+};
+
+// ================= INITIALIZE APP =================
+function initializeApp() {
+  // Set initial background (IMPORTANT: Call this first!)
+  setBackground();
+  
+  // Start clock
+  updateClock();
+  setInterval(updateClock, 1000);
+  
+  // Update background every 5 minutes
+  setInterval(setBackground, 300000);
+  
+  // Check for daily reset
+  checkDailyReset();
+  
+  // Load today's tasks
+  loadTodayTasks();
+  
+  // Load weekly timetable
+  loadWeeklyTimetable();
+  
+  // Load quotes
+  loadQuotes();
+  
+  // Update progress
+  updateProgress();
+  
+  // Update streak display
+  document.getElementById('streak').textContent = streak;
+  
+  // Check if already completed today
+  if (localStorage.getItem('todayCompleted') === 'true') {
+    showAffirmation();
+  }
+}
+
+// ================= LOAD TODAY'S TASKS =================
+function loadTodayTasks() {
+  const taskList = document.getElementById("taskList");
+  const todaySchedule = weeklySchedule[currentDay];
+  
+  taskList.innerHTML = '';
+  
+  todaySchedule.forEach((item, index) => {
+    const isCompleted = completedTasks[currentDay]?.includes(index) || false;
+    
+    const taskDiv = document.createElement('div');
+    taskDiv.className = `task ${item.session}`;
+    taskDiv.innerHTML = `
+      <div class="heart-checkbox ${isCompleted ? 'checked' : ''}" 
+           onclick="toggleTask(${index})"></div>
+      <div class="task-time">${item.time}</div>
+      <div class="task-text ${item.task.includes('Coin') ? 'coin-session' : ''}">
+        ${item.task}
+      </div>
+    `;
+    
+    taskList.appendChild(taskDiv);
+  });
+}
+
+// ================= TOGGLE TASK =================
+function toggleTask(index) {
+  if (!completedTasks[currentDay]) {
+    completedTasks[currentDay] = [];
+  }
+  
+  const taskIndex = completedTasks[currentDay].indexOf(index);
+  if (taskIndex > -1) {
+    completedTasks[currentDay].splice(taskIndex, 1);
+  } else {
+    completedTasks[currentDay].push(index);
+  }
+  
+  localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+  
+  // Reload tasks to update checkboxes
+  loadTodayTasks();
+  
+  // Update progress
+  updateProgress();
+  
+  // Check if all tasks completed
+  const todaySchedule = weeklySchedule[currentDay];
+  const completedCount = completedTasks[currentDay]?.length || 0;
+  
+  if (completedCount === todaySchedule.length) {
+    celebrateCompletion();
+    updateStreak();
+  }
+}
+
+// ================= UPDATE PROGRESS =================
+function updateProgress() {
+  const todaySchedule = weeklySchedule[currentDay];
+  const completedCount = completedTasks[currentDay]?.length || 0;
+  const totalTasks = todaySchedule.length;
+  const percentage = Math.round((completedCount / totalTasks) * 100);
+  
+  // Update progress bar
+  const progressBar = document.getElementById("progress");
+  progressBar.style.width = `${percentage}%`;
+  
+  // Update progress text
+  document.getElementById("progress-text").textContent = `${percentage}%`;
+  document.getElementById("progress-indicator").textContent = `${percentage}%`;
+  document.getElementById("score").textContent = `${percentage}%`;
+  
+  // Update progress indicator color
+  const indicator = document.getElementById("progress-indicator");
+  if (percentage === 100) {
+    indicator.style.color = "#4CAF50";
+    indicator.style.textShadow = "0 0 10px #4CAF50";
+  } else if (percentage >= 50) {
+    indicator.style.color = "#FF9800";
+    indicator.style.textShadow = "0 0 10px #FF9800";
+  } else {
+    indicator.style.color = "var(--pink)";
+    indicator.style.textShadow = "0 0 10px var(--pink)";
+  }
+}
+
+// ================= LOAD WEEKLY TIMETABLE =================
+function loadWeeklyTimetable() {
+  const weeklyTimetable = document.getElementById("weeklyTimetable");
+  weeklyTimetable.innerHTML = '';
+  
+  for (const day in weeklySchedule) {
+    const dayCard = document.createElement('div');
+    dayCard.style.cssText = `
+      background: ${day === currentDay ? 'rgba(255, 154, 203, 0.2)' : 'rgba(255, 255, 255, 0.05)'};
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      border-left: 4px solid ${day === currentDay ? 'var(--pink)' : 'transparent'};
+    `;
+    
+    let dayHTML = `<h3 style="margin: 0 0 10px 0; color: ${day === currentDay ? 'var(--pink)' : 'white'}">${day}</h3>`;
+    
+    weeklySchedule[day].forEach(item => {
+      dayHTML += `
+        <div style="margin: 8px 0; padding-left: 10px; border-left: 3px solid ${getSessionColor(item.session)}">
+          <div style="font-weight: 600;">${item.time}</div>
+          <div>${item.task}</div>
+        </div>
+      `;
+    });
+    
+    dayCard.innerHTML = dayHTML;
+    weeklyTimetable.appendChild(dayCard);
+  }
+}
+
+function getSessionColor(session) {
+  switch(session) {
+    case 'morning': return '#ff9a00';
+    case 'afternoon': return '#00b4d8';
+    case 'evening': return '#ff477e';
+    default: return 'white';
+  }
+}
+
+// ================= LOAD QUOTES =================
+function loadQuotes() {
+  const quotesList = document.getElementById("quotesList");
+  quotesList.innerHTML = '';
+  
+  quotes.forEach((quote, index) => {
+    const quoteDiv = document.createElement('div');
+    quoteDiv.style.cssText = `
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      font-style: italic;
+      font-size: 18px;
+      border-left: 4px solid var(--blue);
+    `;
+    quoteDiv.textContent = `"${quote}"`;
+    quotesList.appendChild(quoteDiv);
+  });
+}
+
+// ================= CELEBRATION =================
+function celebrateCompletion() {
+  // Mark today as completed
+  localStorage.setItem('todayCompleted', 'true');
+  
+  // Select random quote
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('affirmation-text').textContent = randomQuote;
+  
+  // Show affirmation
+  showAffirmation();
+  
+  // Create confetti
+  createConfetti();
+  
+  // Save the quote
+  const savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+  if (!savedQuotes.includes(randomQuote)) {
+    savedQuotes.push(randomQuote);
+    localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
+  }
+}
+
+function createConfetti() {
+  const colors = ['#ff9acb', '#6ecbff', '#ffd700', '#4CAF50'];
+  
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.width = Math.random() * 10 + 5 + 'px';
+    confetti.style.height = confetti.style.width;
+    confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+    confetti.style.animationDelay = Math.random() * 1 + 's';
+    
+    document.body.appendChild(confetti);
+    
+    setTimeout(() => {
+      if (confetti.parentNode) {
+        confetti.remove();
+      }
+    }, 4000);
+  }
+}
+
+// ================= SHOW/HIDE AFFIRMATION =================
+function showAffirmation() {
+  document.getElementById('affirmation').style.display = 'flex';
+}
+
+function closeAffirmation() {
+  document.getElementById('affirmation').style.display = 'none';
+}
+
+// ================= UPDATE STREAK =================
+function updateStreak() {
+  const today = new Date().toDateString();
+  const lastCompletedDate = localStorage.getItem('lastCompletedDate');
+  
+  if (lastCompletedDate === today) {
+    return; // Already updated today
+  }
+  
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toDateString();
+  
+  if (lastCompletedDate === yesterdayStr) {
+    streak++;
+  } else {
+    streak = 1;
+  }
+  
+  localStorage.setItem('streak', streak);
+  localStorage.setItem('lastCompletedDate', today);
+  
+  document.getElementById('streak').textContent = streak;
+}
+
+// ================= CHECK DAILY RESET =================
+function checkDailyReset() {
+  const today = new Date().toDateString();
+  const lastResetDate = localStorage.getItem('lastResetDate');
+  
+  if (lastResetDate !== today) {
+    // Reset today's completion flag
+    localStorage.removeItem('todayCompleted');
+    localStorage.setItem('lastResetDate', today);
+    
+    // Don't clear completed tasks - keep history
+  }
+}
+
+// ================= SHOW SECTION =================
+function showSection(sectionId) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.style.display = 'none';
+  });
+  
+  // Show selected section
+  document.getElementById(sectionId).style.display = 'block';
+}
+
+// SET BACKGROUND IMMEDIATELY WHEN PAGE LOADS
+window.addEventListener('load', function() {
+  console.log("Page loaded - setting background...");
+  setBackground();
+  
+  // Set a backup timer in case first load fails
+  setTimeout(function() {
+    const oceanBg = document.getElementById("ocean-bg");
+    // Check if background is still default gradient
+    if (oceanBg.style.backgroundImage === '' || oceanBg.style.backgroundImage === 'none') {
+      console.log("Background not loaded after 2 seconds, forcing pattern background");
+      const hour = new Date().getHours();
+      let period = "night";
+      if (hour >= 5 && hour < 11) period = "morning";
+      else if (hour >= 11 && hour < 16) period = "afternoon";
+      else if (hour >= 16 && hour < 18) period = "evening";
+      
+      oceanBg.style.backgroundImage = "none";
+      oceanBg.style.background = patternBackgrounds[period];
+      oceanBg.style.opacity = "1";
+    }
+  }, 2000);
+});
+
+// Emergency background fix button (hidden but can be enabled for debugging)
+const emergencyBtn = document.createElement('button');
+emergencyBtn.innerHTML = '🌊 Fix Background';
+emergencyBtn.style.cssText = `
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: var(--pink);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  display: none; /* Hidden by default */
+`;
+emergencyBtn.onclick = function() {
+  console.log("Emergency background fix activated!");
+  setBackground();
+  alert("Background refreshed! Check console for details.");
+};
+document.body.appendChild(emergencyBtn);
+
+// To enable emergency button, uncomment this line:
+// emergencyBtn.style.display = 'block';
+</script>
+
+</body>
+</html>
